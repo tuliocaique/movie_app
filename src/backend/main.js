@@ -59,7 +59,7 @@ app.get('/movies', limiter, async (req, res) => {
 });
 
 // Inicia o servidor
-app.listen(process.env.API_LIMITER_PORT, async () => {
+app.listen(process.env.API_PORT, async () => {
     console.log('Servidor iniciado na porta 3000');
     await redisClient.connect();
 });

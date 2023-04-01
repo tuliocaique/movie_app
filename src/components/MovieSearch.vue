@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <h2>Pesquisar Filmes</h2>
-        <form @submit.prevent="searchMovies">
+        <form @submit.prevent="searchMovies(true)">
             <input type="text" v-model="searchTerm" placeholder="Digite um nome de filme...">
             <button type="submit">Pesquisar</button>
         </form>
@@ -26,7 +26,7 @@
                     <div v-else-if="viewMode === 'grid'" class="grid">
                         <div v-for="movie in movies" :key="movie.id">
                             <div @click.prevent="showMovieDetails(movie)">
-                                <img :src="getImageUrl(movie)" alt="Movie poster" @error="setPlaceholderImage($event)">
+                                <img :src="getImageUrl(movie)" alt="Movie poster">
                                 <div>{{ movie.title }}</div>
                             </div>
                         </div>
@@ -64,6 +64,8 @@
 <script>
 
 import axios from "axios";
+import placeholder from '@/assets/placeholder.jpeg';
+
 export default {
     name: 'MovieSearch',
     data() {
@@ -82,36 +84,40 @@ export default {
         nextPage() {
             if (this.movies.length === 0) return;
             this.currentPage++;
-            this.searchMovies(false);
+            this.searchMovies();
         },
         prevPage() {
             if (this.currentPage === 1) return;
             this.currentPage--;
-            this.searchMovies(false);
+            this.searchMovies();
         },
-        async searchMovies(reset = true) {
+        async searchMovies(reset = false) {
             if (reset) this.currentPage = 1;
             try {
                 this.searched = true;
-                const response = await axios.get(
-                    `http://localhost:3000/movies?query=${this.searchTerm}&page=${this.currentPage}`
-                );
-
-                this.movies = response.data.results;
-                this.totalPages = response.data.total_pages;
+                const params = {
+                    query: this.searchTerm,
+                    page: this.currentPage
+                };
+                await axios.get(
+                    `http://${process.env.API_HOST}:${process.env.API_PORT}/movies`, { params }
+                ).then(response => {
+                    this.movies = response.data.results;
+                    this.totalPages = response.data.total_pages;
+                });
             } catch (error) {
                 console.log(error);
             }
         },
         getImageUrl(movie) {
-            return `https://image.tmdb.org/t/p/w185/${movie.poster_path}`;
+            if (movie.poster_path) {
+                return `https://image.tmdb.org/t/p/w185/${movie.poster_path}`;
+            }
+            return placeholder;
         },
         showMovieDetails(movie) {
             this.selectedMovie = movie;
             this.showModal = true;
-        },
-        setPlaceholderImage(event) {
-            event.target.src = "../assets/placeholder.png";
         },
         toggleLayout() {
             this.viewMode = this.viewMode === 'list' ? 'grid' : 'list';
