@@ -7,12 +7,12 @@
             </div>
             <div class="modal-body">
                 <img :src="getImageUrl(selectedMovie)" alt="Movie poster">
+                <p><i>{{ selectedMovie.original_title }}</i></p>
                 <p class="modal-overview">{{ selectedMovie.overview }}</p>
                 <div class="modal-info">
-                    <p>Lançamento: {{ formatDate(selectedMovie.release_date) }}</p>
+                    <p>Lançamento: {{ selectedMovie.release_date }}</p>
                     <p class="modal-rating">Nota: {{ selectedMovie.vote_average }}</p>
                 </div>
-                <button class="modal-close-btn" @click="closeModal">Fechar</button>
             </div>
         </div>
     </div>
@@ -39,11 +39,6 @@ export default {
         closeModal() {
             this.$emit('close-modal');
         },
-        formatDate(date) {
-            const [year, month, day] = date.split('-');
-            const formattedDate = new Date(year, month - 1, day);
-            return formattedDate.toLocaleDateString('pt-BR');
-        }
     },
 };
 </script>

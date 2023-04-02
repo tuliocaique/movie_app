@@ -1,13 +1,13 @@
 <template>
-    <div class="container">
+    <main class="container">
         <h2>Pesquisar Filmes</h2>
         <form @submit.prevent="searchMovies(true)">
             <input type="text" v-model="searchTerm" placeholder="Digite um nome de filme...">
-            <button type="submit">Pesquisar</button>
+            <button type="submit"><font-awesome-icon :icon="['fas', 'magnifying-glass']" /> Pesquisar</button>
         </form>
         <MovieResults v-if="movies.length > 0" :movies="movies" :view-mode="viewMode" @toggle-layout="toggleLayout" @prev-page="prevPage" @next-page="nextPage" :current-page="currentPage" :total-pages="totalPages" :search-term="searchTerm" :searched="searched"/>
         <p v-else-if="searched && !findSearchResults">Nenhum filme foi encontrado.</p>
-    </div>
+    </main>
 </template>
 
 <script>
@@ -26,7 +26,7 @@ export default {
             findSearchResults: false,
             selectedMovie: {},
             showModal: false,
-            viewMode: 'list',
+            viewMode: 'grid',
             searched: false,
             currentPage: 1,
             totalPages: null,
@@ -89,17 +89,24 @@ export default {
     padding: 0;
 }
 
+html, body {
+    height: 100%;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     line-height: 1.5;
     background-color: var(--light-color);
+    display: flex;
+    flex-direction: column;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 15px;
+    flex: 1 0 auto;
 }
 
 h2 {
@@ -126,7 +133,7 @@ input[type="text"] {
     color: var(--secondary-color);
 }
 
-button[type="submit"] {
+button {
     margin-left: 10px;
     padding: 10px 15px;
     border: none;
@@ -139,7 +146,7 @@ button[type="submit"] {
     transition: background-color 0.2s ease;
 }
 
-button[type="submit"]:hover {
+button:hover {
     background-color: #0069d9;
 }
 
@@ -173,7 +180,7 @@ a:hover {
 
 @media only screen and (max-width: 767px) {
     body {
-        padding-bottom: 70px; /* ajuste a altura de acordo com a altura do seu rodapé */
+        padding-bottom: 70px;
     }
     .container {
         padding: 0 10px;
@@ -194,6 +201,5 @@ a:hover {
         margin-top: 10px;
     }
 }
-
 </style>
 

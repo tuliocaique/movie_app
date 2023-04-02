@@ -1,11 +1,17 @@
 <template>
-    <div class="results-container">
-        <h3>Resultados</h3>
+    <div class="layout-container">
+        <div class="layout-info-search">
+            <h4>Mostrando resultados para "{{ searchTerm }}"</h4>
+            <h6>Página {{currentPage}} de {{totalPages}}</h6>
+        </div>
         <div class="layout-buttons">
             <button @click="$emit('toggle-layout')">
-                {{ viewMode === 'list' ? 'Grid' : 'List' }}
+                <font-awesome-icon :icon="['fas', 'grip']" v-if="viewMode === 'list'"/>
+                <font-awesome-icon :icon="['fas', 'list']" v-if="viewMode === 'grid'"/>
             </button>
         </div>
+    </div>
+    <div class="results-container">
         <div v-if="viewMode === 'list'">
             <MovieList :movies="movies" @show-movie-details="showMovieDetails" />
         </div>
@@ -13,8 +19,8 @@
             <MovieGrid :movies="movies" @show-movie-details="showMovieDetails" />
         </div>
         <div class="pagination">
-            <button class="prev-btn custom-btn" :disabled="currentPage === 1" @click="$emit('prev-page')">Anterior</button>
-            <button class="next-btn custom-btn" :disabled="currentPage === totalPages" @click="$emit('next-page')">Próxima</button>
+            <button class="prev-btn custom-btn" :disabled="currentPage === 1" @click="$emit('prev-page')"><font-awesome-icon :icon="['fas', 'angle-left']" /> Anterior</button>
+            <button class="next-btn custom-btn" :disabled="currentPage === totalPages" @click="$emit('next-page')">Próxima <font-awesome-icon :icon="['fas', 'angle-right']" /></button>
         </div>
         <MovieModal v-if="showModal" :selected-movie="selectedMovie" :movie="selectedMovie" @close-modal="showModal = false" />
     </div>
@@ -79,7 +85,11 @@ export default {
     flex-direction: column;
     align-items: center;
 }
-
+.layout-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
