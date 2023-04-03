@@ -15,7 +15,9 @@ app.use(limiter);
 
 // Rota para buscar filmes na API do The Movies DB com base no termo de pesquisa fornecido
 app.get('/movies', async (req, res) => {
+    console.log('GET /movies');
 
+    // Validação dos parâmetros
     if (!req.query.query) {
         return res.status(400).json({ error: 'O parâmetro "query" é obrigatório', status: 400 });
     }
@@ -84,12 +86,22 @@ app.get('/movies', async (req, res) => {
     }
 });
 
+
+// Middleware para tratar rotas não encontradas
+app.use(function(req, res, next){
+    res.status(404).send({
+        description: "Rota não localizada"
+    });
+});
+
 // Inicia o servidor
 let server = app.listen(process.env.API_PORT, async () => {
     console.log(`Servidor iniciado na porta ${process.env.API_PORT}`);
     try {
         console.log('Conectando ao Redis');
-        await redisClient.connect();
+        await redisClient.connect().then(() => {
+            console.log('Conectado ao Redis');
+        });
     } catch (error) {
         console.log('Erro ao conectar ao Redis');
         process.exit(0);
