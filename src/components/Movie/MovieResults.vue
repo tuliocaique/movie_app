@@ -128,13 +128,13 @@ export default {
 }
 
 .pagination button.custom-btn {
-    background-color: #e91e63;
+    background-color: #1ee9a4;
     color: #fff;
 }
 
 .pagination button.custom-btn:hover {
     background-color: #fff;
-    color: #e91e63;
+    color: #1ee9a4;
 }
 
 .pagination button[disabled] {
