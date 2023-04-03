@@ -85,9 +85,23 @@ app.get('/movies', async (req, res) => {
 });
 
 // Inicia o servidor
-app.listen(process.env.API_PORT, async () => {
+let server = app.listen(process.env.API_PORT, async () => {
     console.log(`Servidor iniciado na porta ${process.env.API_PORT}`);
-    await redisClient.connect();
+    try {
+        console.log('Conectando ao Redis');
+        await redisClient.connect();
+    } catch (error) {
+        console.log('Erro ao conectar ao Redis');
+        process.exit(0);
+    }
+});
+
+process.on('SIGINT', () => {
+    console.log('Encerrando servidor');
+    server.close(() => {
+        console.log('Servidor encerrado');
+        process.exit(0);
+    });
 });
 
 module.exports = app;
