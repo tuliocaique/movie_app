@@ -29,3 +29,8 @@ npm run backend
 ```
 npm run serve
 ```
+
+## Screenshots
+![Exibição em lista](https://github.com/tuliocaique/movieapp/blob/master/src/assets/img_1.png?raw=true)
+![Exibição em grid](https://github.com/tuliocaique/movieapp/blob/master/src/assets/img_2.png?raw=true)
+![Exibição da modal](https://github.com/tuliocaique/movieapp/blob/master/src/assets/img_3.png?raw=true)
